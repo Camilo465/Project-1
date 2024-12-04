@@ -3,8 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|c:\\users\\lucas\\source\\repos\\apicatalogo\\apicatalogo\\migrations\\20241203201253_populaprodutos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|solutionrelative:apicatalogo\\migrations\\20241203201253_populaprodutos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|c:\\users\\lucas\\source\\repos\\apicatalogo\\apicatalogo\\migrations\\20241203190939_migracaoinicial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|solutionrelative:apicatalogo\\migrations\\20241203190939_migracaoinicial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|c:\\users\\lucas\\source\\repos\\apicatalogo\\apicatalogo\\models\\produto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|solutionrelative:apicatalogo\\models\\produto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|c:\\users\\lucas\\source\\repos\\apicatalogo\\apicatalogo\\models\\categoria.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|solutionrelative:apicatalogo\\models\\categoria.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|c:\\users\\lucas\\source\\repos\\apicatalogo\\apicatalogo\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|solutionrelative:apicatalogo\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +31,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "20241203201253_PopulaProdutos.cs",
-              "DocumentMoniker": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Migrations\\20241203201253_PopulaProdutos.cs",
-              "RelativeDocumentMoniker": "APICatalogo\\Migrations\\20241203201253_PopulaProdutos.cs",
-              "ToolTip": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Migrations\\20241203201253_PopulaProdutos.cs*",
-              "RelativeToolTip": "APICatalogo\\Migrations\\20241203201253_PopulaProdutos.cs*",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAzwBkAAAAmAAAAAAAAAA==",
+              "Title": "20241203190939_MigracaoInicial.cs",
+              "DocumentMoniker": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Migrations\\20241203190939_MigracaoInicial.cs",
+              "RelativeDocumentMoniker": "APICatalogo\\Migrations\\20241203190939_MigracaoInicial.cs",
+              "ToolTip": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Migrations\\20241203190939_MigracaoInicial.cs",
+              "RelativeToolTip": "APICatalogo\\Migrations\\20241203190939_MigracaoInicial.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-03T20:12:53.719Z",
+              "WhenOpened": "2024-12-04T15:14:39.639Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Categoria.cs",
+              "DocumentMoniker": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Models\\Categoria.cs",
+              "RelativeDocumentMoniker": "APICatalogo\\Models\\Categoria.cs",
+              "ToolTip": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Models\\Categoria.cs",
+              "RelativeToolTip": "APICatalogo\\Models\\Categoria.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwBUAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-04T15:04:14.927Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Produto.cs",
+              "DocumentMoniker": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Models\\Produto.cs",
+              "RelativeDocumentMoniker": "APICatalogo\\Models\\Produto.cs",
+              "ToolTip": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Models\\Produto.cs",
+              "RelativeToolTip": "APICatalogo\\Models\\Produto.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAYwBIAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-04T15:11:08.289Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Program.cs",
+              "RelativeDocumentMoniker": "APICatalogo\\Program.cs",
+              "ToolTip": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Program.cs",
+              "RelativeToolTip": "APICatalogo\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-03T20:24:07.606Z",
               "EditorCaption": ""
             }
           ]
