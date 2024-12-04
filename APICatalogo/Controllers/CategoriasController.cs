@@ -28,18 +28,28 @@ namespace APICatalogo.Controllers
         [HttpGet("{id:int}", Name = "ObterCategoria")]
         public ActionResult<Categoria> GetId(int id)
         {
-            var categoria = _context.Categorias.AsNoTracking().FirstOrDefault(p => p.CategoriaId == id);
-            if (categoria is null)
+            try
             {
-                return NotFound("Categoria não encontrado.");
+                var categoria = _context.Categorias.AsNoTracking().FirstOrDefault(p => p.CategoriaId == id);
+                if (categoria is null)
+                {
+                    return NotFound("Categoria não encontrado.");
+                }
+                return Ok(categoria);
             }
-            return Ok(categoria);
+            catch (Exception)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, 
+                    "Ocorreu um problema ao tratar a sua solicitação.");
+            }
+            
         }
         [HttpPost]
         public ActionResult Post(Categoria categoria)
         {
             if (categoria is null)
-                return BadRequest();
+                return BadRequest("Dados inválidos");
 
             _context.Categorias.Add(categoria);
             _context.SaveChanges();
@@ -51,7 +61,7 @@ namespace APICatalogo.Controllers
         public ActionResult Put(int id, Categoria categoria)
         {
             if (id != categoria.CategoriaId)
-                return BadRequest();
+                return BadRequest("Dados inválidos.");
 
             _context.Entry(categoria).State = EntityState.Modified;
             _context.SaveChanges();

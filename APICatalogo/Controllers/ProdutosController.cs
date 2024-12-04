@@ -40,18 +40,18 @@ namespace APICatalogo.Controllers
         public ActionResult Post(Produto produto)
         {
             if (produto is null)
-                return BadRequest();
+                return BadRequest("Dados inválidos.");
             _context.Produtos.Add(produto);
             _context.SaveChanges();
 
-            return new CreatedAtRouteResult("ObterProduto",
+            return new CreatedAtRouteResult("ObterProduto.",
                 new { id = produto.ProdutoId }, produto);
         }
         [HttpPut("{id:int}")]
         public ActionResult Put(int id, Produto produto)
         {
             if (id != produto.ProdutoId)
-                return BadRequest();
+                return BadRequest("Dados inválidos.");
 
             _context.Entry(produto).State = EntityState.Modified;
             _context.SaveChanges();
