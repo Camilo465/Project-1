@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace APICatalogo.Models
 {
     [Table("Produtos")]
-    public class Produto
+    public class Produto : IValidatableObject
     {
         [Key]
         public int ProdutoId { get; set; }
@@ -20,12 +20,21 @@ namespace APICatalogo.Models
         public decimal Preco { get; set; }
         [Required]
         [StringLength(300)]
-        public string? ImagemUrl { get; set; }
+        public string? ImagemUrl { get; set; }        
         public float Estoque { get; set; }
         public DateTime DataCadastro { get; set; }
         public int CategoriaId { get; set; }
         [JsonIgnore]
         public Categoria? Categoria { get; set; }
 
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if(this.Estoque <= 0)
+            {
+                yield return new
+                    ValidationResult("O estoque deve ser maior que 0,", new[]
+                    { nameof(this.Nome) });
+            }
+        }
     }
 }
