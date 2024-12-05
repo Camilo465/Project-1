@@ -28,6 +28,7 @@ namespace APICatalogo.Controllers
         [HttpGet("{id:int}", Name = "ObterCategoria")]
         public async Task<ActionResult<Categoria>> GetId(int id)
         {
+            throw new Exception("Id não encontrado");
             try
             {
                 var categoria = await _context.Categorias.AsNoTracking().FirstOrDefaultAsync(p => p.CategoriaId == id);
