@@ -1,5 +1,7 @@
 ﻿using APICatalogo.Context;
+using APICatalogo.Filters;
 using APICatalogo.Models;
+using APICatalogo.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,75 +12,60 @@ namespace APICatalogo.Controllers
     [ApiController]
     public class CategoriasController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public CategoriasController(AppDbContext context)
+        private readonly ICategoriaRepository _repository;
+        public CategoriasController(ICategoriaRepository repository)
         {
-            _context = context;
-        }
-        [HttpGet("produtos")]
-        public async Task<ActionResult<IEnumerable<Categoria>>> GetCategoriasProdutos()
-        {
-            return await _context.Categorias.Include(p => p.Produtos).ToListAsync();
+            _repository = repository;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categoria>>> Get()
+        [ServiceFilter(typeof(ApiLogginFilter))]
+        public ActionResult<IEnumerable<Categoria>> Get()
         {
-            return await _context.Categorias.AsNoTracking().ToListAsync();
+            var categoria = _repository.GetCategorias();
+            return Ok(categoria);
         }
         [HttpGet("{id:int}", Name = "ObterCategoria")]
-        public async Task<ActionResult<Categoria>> GetId(int id)
-        {            
-            try
+        public ActionResult<Categoria> GetId(int id)
+        {
+            var categoria = _repository.GetCategoria(id);
+            if (categoria is null)
             {
-                var categoria = await _context.Categorias.AsNoTracking().FirstOrDefaultAsync(p => p.CategoriaId == id);
-                if (categoria is null)
-                {
-                    return NotFound("Categoria não encontrado.");
-                }
-                return Ok(categoria);
+                return NotFound($"Categoria com id={id} não encontrado");
             }
-            catch (Exception)
-            {
+            return Ok(categoria);
+        }      
 
-                return StatusCode(StatusCodes.Status500InternalServerError, 
-                    "Ocorreu um problema ao tratar a sua solicitação.");
-            }
-            
-        }
         [HttpPost]
-        public async Task<ActionResult> Post(Categoria categoria)
+        public ActionResult Post(Categoria categoria)
         {
             if (categoria is null)
                 return BadRequest("Dados inválidos");
 
-            await _context.Categorias.AddAsync(categoria);
-            await _context.SaveChangesAsync();
+            var categoriaCriada = _repository.Create(categoria);
+            
 
-            return new CreatedAtRouteResult("ObterProduto",
-                new { id = categoria.CategoriaId }, categoria);
+            return new CreatedAtRouteResult("ObterCategoria",
+                new { id = categoriaCriada.CategoriaId }, categoriaCriada);
         }
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, Categoria categoria)
+        public ActionResult Put(int id, Categoria categoria)
         {
             if (id != categoria.CategoriaId)
                 return BadRequest("Dados inválidos.");
 
-            _context.Entry(categoria).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            _repository.Update(categoria);
 
             return Ok(categoria);
         }
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
+        public ActionResult Delete(int id)
         {
-            var categoria = await _context.Categorias.FirstOrDefaultAsync(p => p.CategoriaId == id);
+            var categoria = _repository.GetCategoria(id);
             if (categoria is null)
-            {
-                return NotFound("Categoria não encontrado.");
-            }
-            _context.Categorias.Remove(categoria);
-            await _context.SaveChangesAsync();
-            return Ok(categoria);
+                return NotFound($"Categoria com id = {id} não encontrada");
+
+            var categoriaExcluir = _repository.Delete(id);
+            return Ok(categoriaExcluir);
         }
     }
 }
