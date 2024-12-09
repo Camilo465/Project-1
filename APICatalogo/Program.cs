@@ -31,7 +31,10 @@ builder.Services.AddControllers(options =>
     optins.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
+
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+
 
 var app = builder.Build();
 

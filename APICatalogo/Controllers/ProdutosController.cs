@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using APICatalogo.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;
+using APICatalogo.Repositories;
 
 namespace APICatalogo.Controllers
 {
@@ -11,65 +12,71 @@ namespace APICatalogo.Controllers
     [ApiController]
     public class ProdutosController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public ProdutosController(AppDbContext context)
+        private readonly IProdutoRepository _repository;
+        public ProdutosController(IProdutoRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Produto>>> Get()
+        public ActionResult<IEnumerable<Produto>> GetProdutos()
         {
-            var produtos = await _context.Produtos.AsNoTracking().ToListAsync();
+            var produtos = _repository.GetProdutos().ToList();
             if(produtos is null)
             {
                 return NotFound();
             }
-            return produtos;
+            return Ok(produtos);
         }
         [HttpGet("{id:int}", Name="ObterProduto")]
-        public async Task<ActionResult<Produto>> GetId(int id)
+        public ActionResult<Produto> GetId(int id)
         {
-            var produto = await _context.Produtos.AsNoTracking().FirstOrDefaultAsync(p => p.ProdutoId == id);
-            if(produto is null)
-            {
-                return NotFound("Produto não encontrado.");
-            }
-            return produto;
+            var produto = _repository.GetProduto(id);
+            if (produto is null)
+                return NotFound("Produto não encontrado...");
+            
+            return Ok(produto);
         }
         [HttpPost]
-        public async Task<ActionResult> Post(Produto produto)
+        public ActionResult Post(Produto produto)
         {
             if (produto is null)
-                return BadRequest("Dados inválidos.");
+                return BadRequest();
             
-            await _context.Produtos.AddAsync(produto);
-            await _context.SaveChangesAsync();
+            var novoProduto = _repository.Create(produto);
+
+
 
             return new CreatedAtRouteResult("ObterProduto",
-                new { id = produto.ProdutoId }, produto);
+                new { id = novoProduto }, novoProduto);
         }
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, Produto produto)
+        public ActionResult Put(int id, Produto produto)
         {
+            
             if (id != produto.ProdutoId)
-                return BadRequest("Dados inválidos.");
+                return BadRequest();
 
-            _context.Entry(produto).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
-            return Ok(produto);
+           bool atualizado = _repository.Update(produto);
+            if (atualizado)
+            {
+                return Ok(produto);
+            }
+            else
+            {
+                return StatusCode(500, $"Falha ao atualizar o produto de id ={id}");
+            }               
+            
         }
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
+        public ActionResult Delete(int id)
         {
-            var produto = await _context.Produtos.FirstOrDefaultAsync(p => p.ProdutoId == id);
-            if(produto is null)
+            bool produto = _repository.Delete(id);
+            if(produto)
             {
-                return NotFound("Produto não encontrado.");
+                return Ok($"Produto com id={id} deletado.");
             }
-            _context.Produtos.Remove(produto);
-            await _context.SaveChangesAsync();
-            return Ok(produto);
+            
+            return StatusCode(500, $"Falha ao atualizar o excluir o produto de id{id}");
         }
     }
 }
