@@ -1,7 +1,7 @@
 ﻿using APICatalogo.Context;
 using APICatalogo.Filters;
 using APICatalogo.Models;
-using APICatalogo.Repositories;
+using APICatalogo.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +12,8 @@ namespace APICatalogo.Controllers
     [ApiController]
     public class CategoriasController : ControllerBase
     {
-        private readonly ICategoriaRepository _repository;
-        public CategoriasController(ICategoriaRepository repository)
+        private readonly IRepository<Categoria> _repository;
+        public CategoriasController(IRepository<Categoria> repository)
         {
             _repository = repository;
         }
@@ -21,13 +21,13 @@ namespace APICatalogo.Controllers
         [ServiceFilter(typeof(ApiLogginFilter))]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
-            var categoria = _repository.GetCategorias();
+            var categoria = _repository.GetAll();
             return Ok(categoria);
         }
         [HttpGet("{id:int}", Name = "ObterCategoria")]
         public ActionResult<Categoria> GetId(int id)
         {
-            var categoria = _repository.GetCategoria(id);
+            var categoria = _repository.Get(c=> c.CategoriaId == id);
             if (categoria is null)
             {
                 return NotFound($"Categoria com id={id} não encontrado");
@@ -60,11 +60,11 @@ namespace APICatalogo.Controllers
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            var categoria = _repository.GetCategoria(id);
+            var categoria = _repository.Get(c => c.CategoriaId == id);
             if (categoria is null)
                 return NotFound($"Categoria com id = {id} não encontrada");
 
-            var categoriaExcluir = _repository.Delete(id);
+            var categoriaExcluir = _repository.Delete(categoria);
             return Ok(categoriaExcluir);
         }
     }

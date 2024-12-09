@@ -1,61 +1,17 @@
 ﻿using APICatalogo.Context;
 using APICatalogo.Models;
+using APICatalogo.Repositories.Interfaces;
 using System.Linq.Expressions;
 
 namespace APICatalogo.Repositories
 {
-    public class ProdutoRepository : IProdutoRepository
+    public class ProdutoRepository : Repository<Produto>, IProdutoRepository
     {
-        private readonly AppDbContext _context;
-        public ProdutoRepository(AppDbContext dbContext)
-        {
-            _context = dbContext;
-        }
-        public IQueryable<Produto> GetProdutos()
-        {
-            return _context.Produtos;
-        }
-        public Produto GetProduto(int id)
-        {
-            var produto = _context.Produtos.FirstOrDefault(p => p.ProdutoId == id);
-            if (produto is null)
-                throw new InvalidOperationException("Produto é null");
+        public ProdutoRepository(AppDbContext context) : base(context) { }       
 
-            return produto;
-        }
-        public Produto Create(Produto produto)
+        public IEnumerable<Produto> GetProdutosPorCategoria(int id)
         {
-            if (produto is null)
-                throw new InvalidOperationException("Produto é null");
-
-            _context.Produtos.Add(produto);
-            _context.SaveChanges();
-            return produto;
+            return GetAll().Where(p => p.CategoriaId == id);
         }
-        public bool Update(Produto produto)
-        {
-            if (produto is null)
-                throw new InvalidOperationException("Produto é null");
-
-            if (_context.Produtos.Any(p=>p.ProdutoId== produto.ProdutoId))
-            {
-                _context.Produtos.Update(produto);
-                _context.SaveChanges();
-                return true;    
-            }
-            return false;
-        }
-        public bool Delete(int id)
-        {
-            var produto = _context.Produtos.Find(id);
-            if(produto is not null)
-            {
-                _context.Produtos.Remove(produto);
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
-        }
-        
     }
 }
