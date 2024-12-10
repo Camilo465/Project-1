@@ -33,7 +33,7 @@ builder.Services.AddControllers(options =>
 .AddJsonOptions(optins =>
 {
     optins.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-});
+}).AddNewtonsoftJson();
 
 
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
