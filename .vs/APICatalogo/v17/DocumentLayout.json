@@ -3,8 +3,11 @@
   "WorkspaceRootPath": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|c:\\users\\lucas\\source\\repos\\apicatalogo\\apicatalogo\\controllers\\categoriascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|solutionrelative:apicatalogo\\controllers\\categoriascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|c:\\users\\lucas\\source\\repos\\apicatalogo\\apicatalogo\\controllers\\produtoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A3D4F2C-06D7-4CB5-B28C-C03A5496D981}|APICatalogo\\APICatalogo.csproj|solutionrelative:apicatalogo\\controllers\\produtoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\lucas\\AppData\\Local\\Temp\\9facf183-4d58-4d7f-9278-3e5edbad6258_12_Filtra_Produtos_Preco.zip.258\\12_Filtra_Produtos_Preco\\11_Filtra_Produtos_Preco\\APICatalogo\\Controllers\\ProdutosController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,19 +17,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "CategoriasController.cs",
-              "DocumentMoniker": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Controllers\\CategoriasController.cs",
-              "RelativeDocumentMoniker": "APICatalogo\\Controllers\\CategoriasController.cs",
-              "ToolTip": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Controllers\\CategoriasController.cs",
-              "RelativeToolTip": "APICatalogo\\Controllers\\CategoriasController.cs",
-              "ViewState": "AgIAACUAAAAAAAAAAAAgwDYAAAAlAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "ProdutosController.cs",
+              "DocumentMoniker": "C:\\Users\\lucas\\AppData\\Local\\Temp\\9facf183-4d58-4d7f-9278-3e5edbad6258_12_Filtra_Produtos_Preco.zip.258\\12_Filtra_Produtos_Preco\\11_Filtra_Produtos_Preco\\APICatalogo\\Controllers\\ProdutosController.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\AppData\\Local\\Temp\\9facf183-4d58-4d7f-9278-3e5edbad6258_12_Filtra_Produtos_Preco.zip.258\\12_Filtra_Produtos_Preco\\11_Filtra_Produtos_Preco\\APICatalogo\\Controllers\\ProdutosController.cs",
+              "ToolTip": "C:\\Users\\lucas\\AppData\\Local\\Temp\\9facf183-4d58-4d7f-9278-3e5edbad6258_12_Filtra_Produtos_Preco.zip.258\\12_Filtra_Produtos_Preco\\11_Filtra_Produtos_Preco\\APICatalogo\\Controllers\\ProdutosController.cs [Read Only]",
+              "RelativeToolTip": "..\\..\\..\\AppData\\Local\\Temp\\9facf183-4d58-4d7f-9278-3e5edbad6258_12_Filtra_Produtos_Preco.zip.258\\12_Filtra_Produtos_Preco\\11_Filtra_Produtos_Preco\\APICatalogo\\Controllers\\ProdutosController.cs [Read Only]",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAAAEUAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-11T16:01:16.28Z",
+              "WhenOpened": "2024-12-11T17:41:14.608Z",
+              "EditorCaption": " [Read Only]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProdutosController.cs",
+              "DocumentMoniker": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Controllers\\ProdutosController.cs",
+              "RelativeDocumentMoniker": "APICatalogo\\Controllers\\ProdutosController.cs",
+              "ToolTip": "C:\\Users\\lucas\\source\\repos\\APICatalogo\\APICatalogo\\Controllers\\ProdutosController.cs",
+              "RelativeToolTip": "APICatalogo\\Controllers\\ProdutosController.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAswDcAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-11T17:31:01.756Z",
               "EditorCaption": ""
             }
           ]
