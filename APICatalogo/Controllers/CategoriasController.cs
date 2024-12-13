@@ -5,6 +5,7 @@ using APICatalogo.Filters;
 using APICatalogo.Models;
 using APICatalogo.Pagination;
 using APICatalogo.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace APICatalogo.Controllers
         {
             _uof = uof;
         }
+        [Authorize]
         [HttpGet]
         [ServiceFilter(typeof(ApiLogginFilter))]
         public async Task<ActionResult<IEnumerable<CategoriaDTO>>> Get()
