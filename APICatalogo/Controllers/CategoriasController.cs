@@ -23,7 +23,7 @@ namespace APICatalogo.Controllers
         {
             _uof = uof;
         }
-        [Authorize]
+        [Authorize(Policy ="UserOnly")]
         [HttpGet]
         [ServiceFilter(typeof(ApiLogginFilter))]
         public async Task<ActionResult<IEnumerable<CategoriaDTO>>> Get()
@@ -116,6 +116,7 @@ namespace APICatalogo.Controllers
             return Ok(novaCategoriaDto);
         }
         [HttpDelete("{id:int}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<CategoriaDTO>> Delete(int id)
         {
             var categoria = await _uof.CategoriaRepository.GetAsync(c => c.CategoriaId == id);

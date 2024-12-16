@@ -95,14 +95,29 @@ builder.Services.AddAuthentication(options =>
                            Encoding.UTF8.GetBytes(secretKey))
     };
 });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+
+    options.AddPolicy("SuperAdminOnly", policy =>
+                       policy.RequireRole("Admin").RequireClaim("id", "LucasCamilo"));
+
+    options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
+
+    options.AddPolicy("ExclusiveOnly", policy =>
+                      policy.RequireAssertion(context =>
+                      context.User.HasClaim(claim =>
+                                           claim.Type == "id" && claim.Value == "LucasCamilo")
+                                           || context.User.IsInRole("SuperAdmin")));
+});
 
 builder.Services.AddScoped<ApiLogginFilter>();
-
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUnitOfWork, UnityOfWork>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ILogger, Logger<Program>>();
 
 
 

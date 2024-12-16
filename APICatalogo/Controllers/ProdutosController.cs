@@ -8,6 +8,7 @@ using APICatalogo.Repositories.Interfaces;
 using APICatalogo.DTOs;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch;
 using APICatalogo.Pagination;
 using Newtonsoft.Json;
 using X.PagedList;
@@ -76,7 +77,7 @@ namespace APICatalogo.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Policy ="UserOnly")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProdutoDTO>>> Get()
         {
@@ -159,7 +160,7 @@ namespace APICatalogo.Controllers
             return Ok(produtoAtualizadoDto);
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int}")]        
         public async Task<ActionResult<ProdutoDTO>> Delete(int id)
         {
             var produto = await _uof.ProdutoRepository.GetAsync(p => p.ProdutoId == id);
