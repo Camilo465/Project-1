@@ -16,14 +16,9 @@ namespace APICatalogo.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class CategoriasController : ControllerBase
+    public class CategoriasController(IUnitOfWork _uof) : ControllerBase
     {
-        private readonly IUnitOfWork _uof;
-        public CategoriasController(IUnitOfWork uof)
-        {
-            _uof = uof;
-        }
-        [Authorize(Policy ="UserOnly")]
+        [Authorize(Policy = "UserOnly")]
         [HttpGet]
         [ServiceFilter(typeof(ApiLogginFilter))]
         public async Task<ActionResult<IEnumerable<CategoriaDTO>>> Get()
@@ -73,7 +68,7 @@ namespace APICatalogo.Controllers
         [HttpGet("{id:int}", Name = "ObterCategoria")]
         public async Task<ActionResult<CategoriaDTO>> GetId(int id)
         {
-            var categoria = await _uof.CategoriaRepository.GetAsync(c=> c.CategoriaId == id);
+            var categoria = await _uof.CategoriaRepository.GetAsync(c => c.CategoriaId == id);
             if (categoria is null)
             {
                 return NotFound($"Categoria com id={id} não encontrado");
@@ -82,16 +77,16 @@ namespace APICatalogo.Controllers
             var categoriaDto = categoria.ToCategoriaDTO();
 
             return Ok(categoriaDto);
-        }      
+        }
 
         [HttpPost]
         public async Task<ActionResult<CategoriaDTO>> Post(CategoriaDTO categoriaDto)
         {
             if (categoriaDto is null)
                 return BadRequest("Dados inválidos");
-            
+
             var categoria = categoriaDto.ToCategoria();
-            
+
             var categoriaCriada = _uof.CategoriaRepository.Create(categoria);
             await _uof.CommitAsync();
 
