@@ -1,243 +1,107 @@
 ﻿using APICatalogo.DTOs;
 using APICatalogo.Models;
-using APICatalogo.Services;
+using APICatalogo.Services.Auth.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
-namespace APICatalogo.Controllers
+namespace APICatalogo.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class AuthController(IAuth _auth) : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    [HttpPost]
+    [Authorize(Policy = "SuperAdminOnly")]
+    [Route("CreateRole")]
+    public async Task<ActionResult<BaseApiResponse<string, string>>> CreateRole(string roleName)
     {
-        private readonly ITokenService _tokenService;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IConfiguration _configuration;
-        private readonly ILogger _logger;
-
-        public AuthController(ITokenService tokenService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ILogger logger)
+        try
         {
-            _tokenService = tokenService;
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _configuration = configuration;
-            _logger = logger;
+            var result = await _auth.CreateRole(roleName);
+            return Ok(result);
         }
-        [HttpPost]
-        [Authorize(Policy="SuperAdminOnly")]
-        [Route("CreateRole")]
-        public async Task<IActionResult> CreateRole(string roleName)
+        catch (Exception ex)
         {
-            var roleExist = await _roleManager.RoleExistsAsync(roleName);
-
-            if (!roleExist)
-            {
-                var roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
-
-                if (roleResult.Succeeded)
-                {
-                    _logger.LogInformation(1, "Roles Added");
-                    return StatusCode(StatusCodes.Status200OK,
-                            new Response
-                            {
-                                Status = "Success",
-                                Message =
-                            $"Role {roleName} added successfully"
-                            });
-                }
-                else
-                {
-                    _logger.LogInformation(2, "Error");
-                    return StatusCode(StatusCodes.Status400BadRequest,
-                       new Response
-                       {
-                           Status = "Error",
-                           Message =
-                           $"Issue adding the new {roleName} role"
-                       });
-                }
-            }
-            return StatusCode(StatusCodes.Status400BadRequest,
-              new Response { Status = "Error", Message = "Role already exist." });
-        }
-        [HttpPost]
-        [Authorize(Policy ="SuperAdminOnly")]
-        [Route("AddUserToRole")]
-        public async Task<IActionResult> AddUserToRole(string email, string roleName)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-
-            if (user != null)
-            {
-                var result = await _userManager.AddToRoleAsync(user, roleName);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation(1, $"User {user.Email} added to the {roleName} role");
-                    return StatusCode(StatusCodes.Status200OK,
-                           new Response
-                           {
-                               Status = "Success",
-                               Message =
-                           $"User {user.Email} added to the {roleName} role"
-                           });
-                }
-                else
-                {
-                    _logger.LogInformation(1, $"Error: Unable to add user {user.Email} to the {roleName} role");
-                    return StatusCode(StatusCodes.Status400BadRequest, new Response
-                    {
-                        Status = "Error",
-                        Message = $"Error: Unable to add user {user.Email} to the {roleName} role"
-                    });
-                }
-            }
-            return BadRequest(new { error = "Unable to find user" });
+            return BadRequest(ex.Message);
         }
 
-        [HttpPost]
-        [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+    }
+    [HttpPost]
+    [Authorize(Policy = "SuperAdminOnly")]
+    [Route("AddUserToRole")]
+    public async Task<ActionResult<BaseApiResponse<string, string>>> AddUserToRole(string email, string roleName)
+    {
+        try
         {
-            var user = await _userManager.FindByNameAsync(model.UserName!);
-
-            if (user is not null && await _userManager.CheckPasswordAsync(user, model.Password!))
-            {
-                var userRoles = await _userManager.GetRolesAsync(user);
-
-                var authClaims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.UserName!),
-                new Claim(ClaimTypes.Email, user.Email!),
-                new Claim("id",user.UserName!),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
-
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }
-
-                var token = _tokenService.GenerateAccessToken(authClaims,
-                                                             _configuration);
-
-                var refreshToken = _tokenService.GenerateRefreshToken();
-
-                _ = int.TryParse(_configuration["JWT:RefreshTokenValidityInMinutes"],
-                                   out int refreshTokenValidityInMinutes);
-
-                user.RefreshTokenExpireTime =
-                                DateTime.Now.AddMinutes(refreshTokenValidityInMinutes);
-
-                user.RefreshToken = refreshToken;
-
-                await _userManager.UpdateAsync(user);
-
-                return Ok(new
-                {
-                    Token = new JwtSecurityTokenHandler().WriteToken(token),
-                    RefreshToken = refreshToken,
-                    Expiration = token.ValidTo
-                });
-            }
-            return Unauthorized();
+            var result = await _auth.AddUserToRole(email, roleName);
+            return Ok(result);
         }
-        [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        catch (Exception ex)
         {
-            var userExists = await _userManager.FindByNameAsync(model.Username!);
-
-            if (userExists != null)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                       new Response { Status = "Error", Message = "User already exists!" });
-            }
-
-            ApplicationUser user = new()
-            {
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
-            };
-
-            var result = await _userManager.CreateAsync(user, model.Password!);
-
-            if (!result.Succeeded)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                       new Response { Status = "Error", Message = "User creation failed." });
-            }
-
-            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
-
+            return BadRequest(ex.Message);
         }
-        [HttpPost]
-        [Route("refresh-token")]
-        public async Task<IActionResult> RefreshToken(TokenModel tokenModel)
+
+    }
+
+    [HttpPost]
+    [Route("login")]
+    public async Task<ActionResult<BaseApiResponse<OutputLoginModel, string>>> Login([FromBody] LoginModel model)
+    {
+        try
         {
+            var result = await _auth.Login(model);
 
-            if (tokenModel is null)
-            {
-                return BadRequest("Invalid client request");
-            }
-
-            string? accessToken = tokenModel.AccessToken
-                                  ?? throw new ArgumentNullException(nameof(tokenModel));
-
-            string? refreshToken = tokenModel.RefreshToken
-                                   ?? throw new ArgumentException(nameof(tokenModel));
-
-            var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken!, _configuration);
-
-            if (principal == null)
-            {
-                return BadRequest("Invalid access token/refresh token");
-            }
-
-            string username = principal.Identity.Name;
-
-            var user = await _userManager.FindByNameAsync(username!);
-
-            if (user == null || user.RefreshToken != refreshToken
-                             || user.RefreshTokenExpireTime <= DateTime.Now)
-            {
-                return BadRequest("Invalid access token/refresh token");
-            }
-
-            var newAccessToken = _tokenService.GenerateAccessToken(
-                                               principal.Claims.ToList(), _configuration);
-
-            var newRefreshToken = _tokenService.GenerateRefreshToken();
-
-            user.RefreshToken = newRefreshToken;
-
-            await _userManager.UpdateAsync(user);
-
-            return new ObjectResult(new
-            {
-                accessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
-                refreshToken = newRefreshToken
-            });
+            return result.Result == null ? Ok(result) : Unauthorized();
         }
-        [Authorize(Policy ="ExclusiveOnly")]
-        [HttpPost]
-        [Route("revoke/{username}")]
-        public async Task<IActionResult> Revoke(string username)
+        catch (Exception ex)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            return BadRequest(ex.Message);
+        }
+    }
+    [HttpPost]
+    [Route("register")]
+    public async Task<ActionResult<BaseApiResponse<string, string>>> Register([FromBody] RegisterModel model)
+    {
+        try
+        {
+            var result = await _auth.Register(model);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
 
-            if (user == null) return BadRequest("Invalid user name");
+    }
+    [HttpPost]
+    [Route("refresh-token")]
+    public async Task<ActionResult<BaseApiResponse<OutputTokenModel, string>>> RefreshToken(InputTokenModel tokenModel)
+    {
+        try
+        {
+            var result = await _auth.RefreshToken(tokenModel);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
 
-            user.RefreshToken = null;
+    }
+    [Authorize(Policy = "ExclusiveOnly")]
+    [HttpPost]
+    [Route("revoke/{username}")]
+    public async Task<ActionResult<BaseApiResponse<string, string>>> Revoke(string username)
+    {
+        try
+        {
+            var result = await _auth.Revoke(username);
 
-            await _userManager.UpdateAsync(user);
-
-            return NoContent();
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }
